@@ -2,7 +2,7 @@
 import asyncio
 import discord
 
-TOKEN = 'NjAzMjQwNTI2OTI5NTkyMzMy.XTckVA.-X645DFcJT-3kA7P0RrA7AVRRlU'
+TOKEN = 'NjAzMjQwNTI2OTI5NTkyMzMy.XTdMlw.bqwjDe6FxuwjYPZAycrwNLaMjGE'
 
 
 import discord
@@ -21,6 +21,13 @@ class MyClient(discord.Client):
 
         if message.content == 'ping':
             await message.channel.send('pong')
+
+        if message.content.startswith('!hello'):
+            msg = 'Hello {0.author.mention}'.format(message)
+            await message.channel.send(msg)
+
+        # if str(message.author) == 'Ourshanabi#5500' :
+        #         await message.channel.send('Ce que dit {0.author.mention} est incroyable. Il est si beau, si fort !' .format(message))
 
 client = MyClient()
 client.run(TOKEN)
