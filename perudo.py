@@ -14,21 +14,28 @@ from strings import round_title
 from strings import welcome_message
 from strings import winner
 
+# cd desktop\\perudo_discord
+
+
 # "Burn all you love."
 bot_names = ['Winston', 'Luke', 'Jeff', 'Jia', 'Ben']
 
+names = ['Toto', 'Wallis']
+
 class Perudo(object):
 
-	def __init__(self, name, player_number, dice_number):
+	def __init__(self, names, player_number, dice_number):
 		self.round = 0
 		self.players = []
-		self.players.append(
-			HumanPlayer(
-				name=name,
-				dice_number=dice_number,
-				game=self
+
+		for name in names:
+			self.players.append(
+				HumanPlayer(
+					name=name,
+					dice_number=dice_number,
+					game=self
+				)
 			)
-		)
 		for i in range(0, player_number):
 			self.players.append(
 				ComputerPlayer(
@@ -144,19 +151,22 @@ def get_argv(args, index, default):
 		value = default
 	return value
 
+
+###☻
+
 def main(args):
 	try:
 		name = get_argv(args, 1, 'Player')
 		bot_number = int(get_argv(args, 2, 3))
-		if bot_number < 1:
-			print(INSUFFICIENT_BOTS)
-			return
+		# if bot_number < 1:
+		# 	print(INSUFFICIENT_BOTS)
+		# 	return
 		dice_number = int(get_argv(args, 3, 5))
 		if dice_number < 1:
 			print(INSUFFICIENT_DICE)
 			return
 
-		Perudo(name, bot_number, dice_number)
+		Perudo(names, bot_number, dice_number)
 	except ValueError:
 		print ('Args must be of the form <name> <bot_number> <dice_number>, where bot_number and dice_number are integers.')
 		return

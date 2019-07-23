@@ -1,3 +1,9 @@
+
+
+From and credit to :
+https://github.com/RuairiD/perudo
+
+
 # Perudo
 Love Perudo but have no friends? You'll love this!
 ### What is it?

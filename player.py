@@ -95,19 +95,19 @@ class ComputerPlayer(Player):
 class HumanPlayer(Player):
 
 	def make_bet(self, current_bet):
-		string = 'Your turn. Your dice:'
+		string = ' turn. his dice:'
 		for die in self.dice:
 			string += ' {0}'.format(die.value)
-		print(string)
+		print(self.name + string)
 		bet = None
 		while bet is None:
 			bet_input = input('> ')
 			if bet_input.lower() == 'dudo':
 				return DUDO
-			if 'x' not in bet_input:
+			if '*' not in bet_input:
 				print(BAD_BET_ERROR)
 				continue
-			bet_fields = bet_input.split('x')
+			bet_fields = bet_input.split('*')
 			if len(bet_fields) < 2:
 				print(BAD_BET_ERROR)
 				continue

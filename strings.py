@@ -1,4 +1,4 @@
-BAD_BET_ERROR = 'Bad bet! Bet must be of the form AxB (A dice of value B) or the word "dudo"'
+BAD_BET_ERROR = 'Bad bet! Bet must be of the form A*B (A dice of value B) or the word "dudo"'
 
 INVALID_DIE_VALUE_ERROR = 'Illegal bet! Die value must be between 1 and 6.'
 NON_PALIFICO_CHANGE_ERROR = 'Illegal bet! During a palifico round, only current or former palificos can change the bet value.'
