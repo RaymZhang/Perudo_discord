@@ -101,7 +101,7 @@ class HumanPlayer(Player):
 		print(string)
 		bet = None
 		while bet is None:
-			bet_input = raw_input('> ')
+			bet_input = input('> ')
 			if bet_input.lower() == 'dudo':
 				return DUDO
 			if 'x' not in bet_input:
