@@ -20,9 +20,11 @@ from strings import INVALID_BET_EXCEPTION
 
 class Player(object):
 
-	def __init__(self, name, dice_number, game):
-		self.name = name
-		self.game = game
+	def __init__(self, joueur, dice_number, client):
+		self.joueur = joueur
+		self.client = client
+		self.name = str(joueur)
+
 		self.palifico_round = -1
 		self.dice = []
 		for i in range(0, dice_number):
@@ -46,7 +48,7 @@ class Player(object):
 
 class ComputerPlayer(Player):
 
-	def make_bet(self, current_bet):
+	async def make_bet(self, current_bet):
 		total_dice_estimate = len(self.dice) * len(self.game.players)
 		if current_bet is None:
 			# CPU is the first player, so make a conservative estimate
@@ -94,21 +96,26 @@ class ComputerPlayer(Player):
 
 class HumanPlayer(Player):
 
-	def make_bet(self, current_bet):
-		string = ' turn. his dice:'
+	async def make_bet(self, current_bet):
+		string = 'Its your turn, here are your dice :'
+		await self.client.perudo_chanel.send('it is {0.mention} turn' .format(self.joueur))
 		for die in self.dice:
 			string += ' {0}'.format(die.value)
 		print(self.name + string)
+		await self.joueur.send(self.name + string)
+
 		bet = None
 		while bet is None:
 			bet_input = input('> ')
 			if bet_input.lower() == 'dudo':
 				return DUDO
 			if '*' not in bet_input:
+				await self.client.perudo_chanel.send(BAD_BET_ERROR)
 				print(BAD_BET_ERROR)
 				continue
 			bet_fields = bet_input.split('*')
 			if len(bet_fields) < 2:
+				await self.client.perudo_chanel.send(BAD_BET_ERROR)
 				print(BAD_BET_ERROR)
 				continue
 
@@ -117,23 +124,29 @@ class HumanPlayer(Player):
 				value = int(bet_fields[1])
 
 				try:
-					bet = create_bet(quantity, value, current_bet, self, self.game)
+					bet = create_bet(quantity, value, current_bet, self, self.client)
 				except InvalidDieValueException:
 					bet = None
 					print(INVALID_DIE_VALUE_ERROR)
+					await self.client.perudo_chanel.send(INVALID_DIE_VALUE_ERROR)
 				except NonPalificoChangeException:
 					bet = None
 					print(NON_PALIFICO_CHANGE_ERROR)
+					await self.client.perudo_chanel.send(NON_PALIFICO_CHANGE_ERROR)
 				except InvalidNonWildcardQuantityException:
 					bet = None
 					print(INVALID_NON_WILDCARD_QUANTITY)
+					await self.client.perudo_chanel.send(INVALID_NON_WILDCARD_QUANTITY)
 				except InvalidWildcardQuantityException:
 					bet = None
 					print(INVALID_WILDCARD_QUANTITY)
+					await self.client.perudo_chanel.send(INVALID_WILDCARD_QUANTITY)
 				except InvalidBetException:
 					bet = None
 					print(INVALID_BET_EXCEPTION)
+					await self.client.perudo_chanel.send(INVALID_BET_EXCEPTION)
 			except ValueError:
 				print(BAD_BET_ERROR)
+				await self.client.perudo_chanel.send(BAD_BET_ERROR)
 
 		return bet

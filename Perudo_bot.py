@@ -4,14 +4,14 @@ import discord
 
 TOKEN = 'NjAzMjQwNTI2OTI5NTkyMzMy.XTdMlw.bqwjDe6FxuwjYPZAycrwNLaMjGE'
 server_ID = 451307339933417472
+#cd desktop\\perudo_discord
 
-import discord
 
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
         print("The bot is ready!")
-        self.id = client.get_guild(451307339933417472)
+        self.id = self.get_guild(451307339933417472)
         self.Simon = self.id.get_member_named("Krak#0491")
         self.Raymond = self.id.get_member_named('Ourshanabi#5500')
         self.Luc = self.id.get_member_named('Wallis#4469')

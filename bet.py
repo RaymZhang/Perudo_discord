@@ -15,7 +15,7 @@ class Bet(object):
 
 DUDO = Bet(quantity=-1, value=1)
 
-def create_bet(quantity, value, last_bet, player, game):
+def create_bet(quantity, value, last_bet, player, client):
 	"""Decide whether proposed bet is valid given the last bet. If it is valid, return a new Bet.
 	Otherwise, throw the relevant exception.
 	"""

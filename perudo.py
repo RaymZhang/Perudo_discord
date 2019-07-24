@@ -4,6 +4,8 @@ import sys
 import time
 from bet import Bet
 from bet import DUDO
+#from bet import EXACT
+
 from player import ComputerPlayer
 from player import HumanPlayer
 from strings import correct_dudo
@@ -24,9 +26,10 @@ names = ['Toto', 'Wallis']
 
 class Perudo(object):
 
-	def __init__(self, names, player_number, dice_number):
+	def __init__(self, discord_client, names, player_number, dice_number):
 		self.round = 0
 		self.players = []
+		self.discord_client = 
 
 		for name in names:
 			self.players.append(
