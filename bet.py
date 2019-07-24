@@ -22,7 +22,7 @@ def create_bet(quantity, value, last_bet, player, client):
 	if value not in range(1, 7):
 		raise InvalidDieValueException()
 	if last_bet:
-		if game.is_palifico_round() and player.palifico_round == -1 and value != last_bet.value:
+		if client.is_palifico_round() and player.palifico_round == -1 and value != last_bet.value:
 			raise NonPalificoChangeException()
 		if last_bet.value == 1 and value > 1 and quantity < last_bet.quantity * 2 + 1:
 			raise InvalidNonWildcardQuantityException()

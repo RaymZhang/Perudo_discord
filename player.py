@@ -42,7 +42,7 @@ class Player(object):
 	def count_dice(self, value):
 		number = 0
 		for die in self.dice:
-			if die.value == value or (not self.game.is_palifico_round() and die.value == 1):
+			if die.value == value or (not self.client.is_palifico_round() and die.value == 1):
 				number += 1
 		return number
 
@@ -96,6 +96,9 @@ class ComputerPlayer(Player):
 
 class HumanPlayer(Player):
 
+	def check(self):
+		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel
+
 	async def make_bet(self, current_bet):
 		string = 'Its your turn, here are your dice :'
 		await self.client.perudo_chanel.send('it is {0.mention} turn' .format(self.joueur))
@@ -104,9 +107,17 @@ class HumanPlayer(Player):
 		print(self.name + string)
 		await self.joueur.send(self.name + string)
 
+	
+
+	
+
+
 		bet = None
 		while bet is None:
-			bet_input = input('> ')
+			bet_input = await self.client.wait_for('message', check = self.check())
+			bet_input = bet_input.content
+			print(str(bet_input))
+
 			if bet_input.lower() == 'dudo':
 				return DUDO
 			if '*' not in bet_input:

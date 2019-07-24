@@ -46,7 +46,7 @@ class MyClient(discord.Client):
 
 		self.id = self.get_guild(451307339933417472)
 		self.perudo_chanel = self.get_channel(602963108448960553)
-		
+
 		# self.Simon = self.id.get_member_named("Krak#0491")
 		# self.Raymond = self.id.get_member_named('Ourshanabi#5500')
 		# self.Luc = self.id.get_member_named('Wallis#4469')
@@ -78,20 +78,31 @@ class MyClient(discord.Client):
 			for joueur in self.liste_joueurs :
 				await message.channel.send('{}'.format(joueur.mention))
 
-		if message.content == '!partie' and self.jeu_on == 1:
+		if message.content == '!jouer' and self.jeu_on == 1:
 			self.jeu_on = 2
 			await self.perudo()
 
-		if message.content == '!reset':
+		if message.content == '!reset' and str(message.author) == 'Ourshanabi#5500' :
 			self.jeu_on = 0
 			self.liste_joueurs = []
+
+	def check(ctx):
+		return lambda m: m.author == ctx.author and m.channel == ctx.channel
+
+	async def get_input_of_type(func, ctx):
+		while True:
+			try:
+				msg = await bot.wait_for('message', check=check(ctx))
+				return msg.content
+			except ValueError:
+				continue
 
 	async def perudo(self):
 
 		self.round = 0
 		self.round = 0
 		self.players = []
-		
+
 
 		for joueur in self.liste_joueurs:
 			self.players.append(
@@ -101,7 +112,7 @@ class MyClient(discord.Client):
 					client = self
 				)
 			)
-	
+
 		random.shuffle(self.players)
 
 		print(welcome_message(self.players))
@@ -140,9 +151,11 @@ class MyClient(discord.Client):
 			else:
 				bet_string = next_bet
 			print('{0}: {1}'.format(current_player.name, bet_string))
+			await self.perudo_chanel.send('{0}: {1}'.format(current_player.name, bet_string))
+
 			if next_bet == DUDO:
 				self.pause(0.5)
-				self.run_dudo(current_player, current_bet)
+				await self.run_dudo(current_player, current_bet)
 				round_over = True
 			else:
 				current_bet = next_bet
@@ -154,17 +167,20 @@ class MyClient(discord.Client):
 
 		self.pause(1)
 
-	def run_dudo(self, player, bet):
+	async def run_dudo(self, player, bet):
 		dice_count = self.count_dice(bet.value)
 		if dice_count >= bet.quantity:
 			print(incorrect_dudo(dice_count, bet.value))
+			await self.perudo_chanel.send(incorrect_dudo(dice_count, bet.value))
+
 			self.first_player = player
-			self.remove_die(player)
+			await self.remove_die(player)
 		else:
 			print(correct_dudo(dice_count, bet.value))
+			await self.perudo_chanel.send(correct_dudo(dice_count, bet.value))
 			previous_player = self.get_previous_player(player)
 			self.first_player = previous_player
-			self.remove_die(previous_player)
+			await self.remove_die(previous_player)
 
 	def count_dice(self, value):
 		number = 0
@@ -173,7 +189,7 @@ class MyClient(discord.Client):
 
 		return number
 
-	def remove_die(self, player):
+	async def remove_die(self, player):
 		player.dice.pop()
 		msg = '{0} loses a die.'.format(player.name)
 		if len(player.dice) == 0:
@@ -186,6 +202,8 @@ class MyClient(discord.Client):
 		else:
 			msg += ' Only {0} left!'.format(len(player.dice))
 		print(msg)
+		await self.perudo_chanel.send(msg)
+
 
 	def is_palifico_round(self):
 		if len(self.players) < 3:
