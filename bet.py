@@ -11,7 +11,7 @@ class Bet(object):
 		self.value = value
 
 	def __repr__(self):
-		return '{0}x {1}'.format(self.quantity, self.value)
+		return '{0}* {1}'.format(self.quantity, self.value)
 
 DUDO = Bet(quantity=-1, value=1)
 
@@ -33,4 +33,3 @@ def create_bet(quantity, value, last_bet, player, game):
 		return Bet(quantity, value)
 	else:
 		return Bet(quantity, value)
-	
