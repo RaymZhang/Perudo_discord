@@ -132,7 +132,7 @@ class MyClient(discord.Client):
 		round_over = False
 		current_bet = None
 		current_player = self.first_player
-		print('{0} will go first...'.format(current_player.name))
+		print('{0} joue en premier...'.format(current_player.name))
 		await self.perudo_chanel.send('{0} will go first...'.format(current_player.name))
 
 		while not round_over:
