@@ -97,7 +97,7 @@ class ComputerPlayer(Player):
 class HumanPlayer(Player):
 
 	def check(self):
-		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel
+		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel and message.content.startswith('!')
 
 	async def make_bet(self, current_bet):
 		string = "C'est à toi de jouer, voici tes dés :"
@@ -115,10 +115,10 @@ class HumanPlayer(Player):
 		bet = None
 		while bet is None:
 			bet_input = await self.client.wait_for('message', check = self.check())
-			bet_input = bet_input.content
+			bet_input = bet_input.content[1:]
 			print(str(bet_input))
 
-			if bet_input.lower() == 'dudo':
+			if bet_input.lower() == 'menteur':
 				return DUDO
 			if '*' not in bet_input:
 				await self.client.perudo_chanel.send(BAD_BET_ERROR)
