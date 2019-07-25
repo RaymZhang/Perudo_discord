@@ -24,7 +24,8 @@ import asyncio
 import discord
 import random
 
-TOKEN = 'NjAyOTExMTA0ODI5NzUxMjk2.XThNfw.4AN847PilCW_PqtdJjqv_sEF4Mw'
+TOKEN = 'NjAzMjQwNTI2OTI5NTkyMzMy.XTdMlw.bqwjDe6FxuwjYPZAycrwNLaMjGE'
+#'NjAyOTExMTA0ODI5NzUxMjk2.XThNfw.4AN847PilCW_PqtdJjqv_sEF4Mw'
 server_ID = 451307339933417472
 
 Perudo_chanel_id = 602963108448960553
@@ -81,6 +82,8 @@ class MyClient(discord.Client):
 		if message.content == '!jouer' and self.jeu_on == 1:
 			self.jeu_on = 2
 			await self.perudo()
+			self.jeu_on = 0
+			self.liste_joueurs = []
 
 		if message.content == '!reset' and str(message.author) == 'Ourshanabi#5500' :
 			self.jeu_on = 0
@@ -120,7 +123,7 @@ class MyClient(discord.Client):
 
 		self.first_player = random.choice(self.players)
 
-		while len(self.players) > 0:
+		while len(self.players) > 1:
 			await self.run_round()
 
 		print(winner(self.players[0].name))
