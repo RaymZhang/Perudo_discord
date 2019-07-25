@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-BAD_BET_ERROR = "Enchère non valide ! Une enchère doit être donnée sous la forme 'A*B' (A dés de valeur B), ou bien être 'Menteur' ou 'Compte exact'"
+BAD_BET_ERROR = "Enchère non valide ! Une enchère doit être donnée sous la forme '!A*B' (A dés de valeur B), ou bien être '!Menteur' ou 'Compte exact'"
 
 INVALID_DIE_VALUE_ERROR = 'Enchère non valide ! La valeur du dé doit être entre 1 et 6'
 NON_PALIFICO_CHANGE_ERROR = 'Enchère non valide ! Pendant le palifico, la valeur du dé ne peut être changée.'
