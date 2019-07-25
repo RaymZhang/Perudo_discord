@@ -60,11 +60,11 @@ class MyClient(discord.Client):
 			return
 
 
-		if message.content == '!perudo' and self.jeu_on == 0:
+		if message.content == '!perudo' and self.jeu_on == 0 and message.channel == self.perudo_chanel:
 			self.jeu_on = 1
 			await message.channel.send('Qui veut jouer au Perudo ?')
 
-		if message.content == 'moi' and self.jeu_on == 1:
+		if message.content == 'moi' and self.jeu_on == 1 and message.channel == self.perudo_chanel:
 			joueur = message.author
 			if joueur not in self.liste_joueurs:
 				self.liste_joueurs.append(joueur)
@@ -73,32 +73,22 @@ class MyClient(discord.Client):
 			else :
 				await message.channel.send('{0.author.mention}, tu joues déjà'.format(message))
 
-		if message.content == '!joueurs' and self.jeu_on == 1:
+		if message.content == '!joueurs' and self.jeu_on == 1 and message.channel == self.perudo_chanel:
 			await message.channel.send('Voici la liste des joueurs déjà inscrits :')
 
 			for joueur in self.liste_joueurs :
 				await message.channel.send('{}'.format(joueur.mention))
 
-		if message.content == '!jouer' and self.jeu_on == 1:
+		if message.content == '!jouer' and self.jeu_on == 1 and message.channel == self.perudo_chanel:
 			self.jeu_on = 2
 			await self.perudo()
 			self.jeu_on = 0
 			self.liste_joueurs = []
 
-		if message.content == '!reset' and str(message.author) == 'Ourshanabi#5500' :
+		if message.content == '!reset' and str(message.author) == 'Ourshanabi#5500' and message.channel == self.perudo_chanel:
 			self.jeu_on = 0
 			self.liste_joueurs = []
 
-	def check(ctx):
-		return lambda m: m.author == ctx.author and m.channel == ctx.channel
-
-	async def get_input_of_type(func, ctx):
-		while True:
-			try:
-				msg = await bot.wait_for('message', check=check(ctx))
-				return msg.content
-			except ValueError:
-				continue
 
 	async def perudo(self):
 
@@ -150,7 +140,7 @@ class MyClient(discord.Client):
 			next_bet = await current_player.make_bet(current_bet)
 			bet_string = None
 			if next_bet == DUDO:
-				bet_string = 'Dudo!'
+				bet_string = 'MENTEUR!'
 			else:
 				bet_string = next_bet
 			print('{0}: {1}'.format(current_player.name, bet_string))
@@ -194,16 +184,16 @@ class MyClient(discord.Client):
 
 	async def remove_die(self, player):
 		player.dice.pop()
-		msg = '{0} loses a die.'.format(player.name)
+		msg = '{0} Perd un dé.'.format(player.name)
 		if len(player.dice) == 0:
 			msg += ' {0} is out!'.format(player.name)
 			self.first_player = self.get_next_player(player)
 			self.players.remove(player)
 		elif len(player.dice) == 1 and player.palifico_round == -1:
 			player.palifico_round = self.round + 1
-			msg += ' Last die! {0} is palifico!'.format(player.name)
+			msg += ' Dernier dé ! {0} est palifico!'.format(player.name)
 		else:
-			msg += ' Only {0} left!'.format(len(player.dice))
+			msg += ' Plus que {0} !'.format(len(player.dice))
 		print(msg)
 		await self.perudo_chanel.send(msg)
 
