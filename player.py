@@ -100,8 +100,8 @@ class HumanPlayer(Player):
 		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel
 
 	async def make_bet(self, current_bet):
-		string = 'Its your turn, here are your dice :'
-		await self.client.perudo_chanel.send('it is {0.mention} turn' .format(self.joueur))
+		string = "C'est à toi de jouer, voici tes dés :"
+		await self.client.perudo_chanel.send("C'est à {0.mention} de jouer" .format(self.joueur))
 		for die in self.dice:
 			string += ' {0}'.format(die.value)
 		print(self.name + string)
