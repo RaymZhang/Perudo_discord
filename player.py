@@ -97,7 +97,7 @@ class ComputerPlayer(Player):
 class HumanPlayer(Player):
 
 	def check(self):
-		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel and message.content.startswith('!')
+		return lambda m: m.author == self.joueur and m.channel == self.client.perudo_chanel and m.content.startswith('!')
 
 	async def make_bet(self, current_bet):
 		string = "C'est à toi de jouer, voici tes dés :"
