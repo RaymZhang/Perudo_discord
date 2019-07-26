@@ -1,6 +1,7 @@
 import random
 from bet import Bet
 from bet import DUDO
+from bet import COMPTE_EXACT
 from bet import create_bet
 from bet_exceptions import BetException
 from bet_exceptions import InvalidDieValueException
@@ -120,6 +121,9 @@ class HumanPlayer(Player):
 
 			if bet_input.lower() == 'menteur':
 				return DUDO
+			if bet_input.lower() == 'compte exact':
+				return COMPTE_EXACT
+				
 			if '*' not in bet_input:
 				await self.client.perudo_chanel.send(BAD_BET_ERROR)
 				print(BAD_BET_ERROR)

@@ -20,6 +20,12 @@ def correct_dudo(quantity, value):
 def incorrect_dudo(quantity, value):
 	return "Il y a bien {0} {1}s. Ce n'était pas un menteur".format(quantity, value)
 
+def correct_compte_exacte(quantity, value):
+	return "Il y a exactement {0} {1}. Bien joué !".format(quantity, value)
+
+def incorrect_compte_exacte(quantity, value):
+	return "Il y a exactement {0} {1}s. C'est raté !".format(quantity, value)
+
 def round_title(round_number, is_palifico_round):
 	if is_palifico_round:
 		title = "Tour {0} - C'est le PALIFICO\n".format(round_number)

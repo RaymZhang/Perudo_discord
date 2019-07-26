@@ -4,10 +4,11 @@ import sys
 import time
 from bet import Bet
 from bet import DUDO
-#from bet import EXACT
+from bet import COMPTE_EXACT
 
 from player import ComputerPlayer
 from player import HumanPlayer
+from die import Die
 from strings import correct_dudo
 from strings import incorrect_dudo
 from strings import INSUFFICIENT_BOTS
@@ -15,6 +16,10 @@ from strings import INSUFFICIENT_DICE
 from strings import round_title
 from strings import welcome_message
 from strings import winner
+
+from strings import incorrect_compte_exacte
+from strings import correct_compte_exacte
+
 
 # cd desktop\\perudo_discord
 
@@ -93,7 +98,6 @@ class MyClient(discord.Client):
 	async def perudo(self):
 
 		self.round = 0
-		self.round = 0
 		self.players = []
 
 
@@ -133,7 +137,7 @@ class MyClient(discord.Client):
 		current_bet = None
 		current_player = self.first_player
 		print('{0} joue en premier...'.format(current_player.name))
-		await self.perudo_chanel.send('{0} will go first...'.format(current_player.name))
+		await self.perudo_chanel.send('{0} joue en premier...'.format(current_player.name))
 
 		while not round_over:
 			next_player = self.get_next_player(current_player)
@@ -141,6 +145,8 @@ class MyClient(discord.Client):
 			bet_string = None
 			if next_bet == DUDO:
 				bet_string = 'MENTEUR!'
+			elif next_bet == COMPTE_EXACT:
+				bet_string = 'Compte exacte !'
 			else:
 				bet_string = next_bet
 			print('{0}: {1}'.format(current_player.name, bet_string))
@@ -149,6 +155,10 @@ class MyClient(discord.Client):
 			if next_bet == DUDO:
 				self.pause(0.5)
 				await self.run_dudo(current_player, current_bet)
+				round_over = True
+			elif next_bet ==COMPTE_EXACT:
+				self.pause(0.5)
+				await self.run_compte_exact(current_player, current_bet)
 				round_over = True
 			else:
 				current_bet = next_bet
@@ -175,6 +185,22 @@ class MyClient(discord.Client):
 			self.first_player = previous_player
 			await self.remove_die(previous_player)
 
+	async def run_compte_exact(self, player, bet):
+		dice_count = self.count_dice(bet.value)
+
+		if dice_count != bet.quantity:
+			print(incorrect_compte_exacte(dice_count, bet.value))
+			await self.perudo_chanel.send(incorrect_compte_exacte(dice_count, bet.value))
+			self.first_player = player
+			await self.remove_die(player)
+		else:
+			print(correct_compte_exacte(dice_count, bet.value))
+			await self.perudo_chanel.send(correct_compte_exacte(dice_count, bet.value))
+			previous_player = self.get_previous_player(player)
+			self.first_player = player
+			await self.add_die(player)
+
+
 	def count_dice(self, value):
 		number = 0
 		for player in self.players:
@@ -197,10 +223,20 @@ class MyClient(discord.Client):
 		print(msg)
 		await self.perudo_chanel.send(msg)
 
+	async def add_die(self, player):
+		if len(player.dice) < self.dice_number :
+			player.dice.append(Die())
+			msg = '{0} Gagne un dé.'.format(player.name)
+			msg += ' Il a maintenant {0} !'.format(len(player.dice))
+		else :
+			msg = '{0} a déja le nombre maximun de dés, Il ne gagne donc pas de dé'.format(player.name)
+		print(msg)
+		await self.perudo_chanel.send(msg)
+
 
 	def is_palifico_round(self):
-		if len(self.players) < 3:
-			return False
+		# if len(self.players) < 3:
+		# 	return False
 		for player in self.players:
 			if player.palifico_round == self.round:
 				return True
